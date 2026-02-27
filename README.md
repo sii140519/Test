@@ -53,3 +53,41 @@ PYTHONPATH=src python3 -m heat_graph_transformer.train --epochs 30 --batch-size 
    - 变量导热系数 \(k(x)\)
    - Neumann/Robin 边界条件
    - 物理约束损失（PDE 残差）
+
+---
+
+## 二维弹性静力有限元程序（矩形板）
+
+已新增 `src/fem2d_elastic_static.py`，用于你描述的工况：
+
+- 几何：`2 x 1` 矩形
+- 网格：`0.1 x 0.1` 正方形 Q4 单元
+- 边界条件：左端全固定
+- 载荷：右端下方节点施加 `Fy = -1000 N`
+
+### 运行方式
+
+```bash
+python3 src/fem2d_elastic_static.py
+```
+
+若希望自动生成结果图（变形网格 + von Mises 应力云图）：
+
+```bash
+python3 src/fem2d_elastic_static.py --plot --plot-dir outputs --disp-scale 1000
+```
+
+可选参数示例：
+
+```bash
+python3 src/fem2d_elastic_static.py --E 2.1e11 --nu 0.3 --thickness 0.01 --force-y -1000
+```
+
+程序会输出：
+
+- 节点数与单元数
+- 最大位移
+- 右下角加载点位移
+- 左端约束反力合力（用于平衡校核）
+- 单元中心 von Mises 应力范围
+- （可选）`outputs/deformed_mesh.png`、`outputs/von_mises.png`
