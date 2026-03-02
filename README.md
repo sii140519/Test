@@ -91,3 +91,22 @@ python3 src/fem2d_elastic_static.py --E 2.1e11 --nu 0.3 --thickness 0.01 --force
 - 左端约束反力合力（用于平衡校核）
 - 单元中心 von Mises 应力范围
 - （可选）`outputs/deformed_mesh.png`、`outputs/von_mises.png`
+
+---
+
+## Level 1 三维钢架梁系程序（steel3d）
+
+已新增 `src/steel3d`，实现基础 3D 梁单元线性静力分析：
+
+- 2 节点 12DOF Euler-Bernoulli 3D 梁单元
+- 节点荷载 + 构件整跨均布荷载（局部 `qy/qz`）
+- 固定/铰接（平动约束，转角自由）边界
+- 稀疏矩阵组装 + `scipy.sparse.linalg.spsolve`
+- 端力恢复：`N, Vy, Vz, T, My, Mz`
+
+运行示例门式刚架：
+
+```bash
+pip install numpy scipy
+PYTHONPATH=src python3 examples/portal_frame_3d.py
+```
